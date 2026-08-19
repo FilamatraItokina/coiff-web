@@ -1,0 +1,12 @@
+:root {
+  --bk-dark: #111111;
+  --bk-darker: #0A0A0A;
+  --bk-gold: #C9A268;
+  --bk-gold-light: #e4bc89;
+  --bk-cream: #F5F1E8;
+  --bk-gray: #777;
+  --bk-border: rgba(201, 162, 104, .18);
+
+  --bk-font-heading: 'Cormorant Garamond', serif;
+  --bk-font-body: 'Barlow Condensed', sans-serif;
+}
