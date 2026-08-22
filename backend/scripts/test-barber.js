@@ -3,6 +3,7 @@ const Barber = require('../models/barber.model');
 try {
   const barber = Barber.create({
     name: 'Barber Test',
+    email: 'barber.test@example.com',
     photoUrl: 'https://example.com/photo.jpg',
     bio: 'Test bio',
     specialties: ['Taille de barbe'],

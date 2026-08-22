@@ -3,7 +3,7 @@ const Service = require('../models/service.model');
 const Appointment = require('../models/appointment.model');
 
 try {
-  const barber = Barber.create({ name: 'Barber For Appt', specialties: [] });
+  const barber = Barber.create({ name: 'Barber For Appt', email: 'barber.appt@example.com', specialties: [] });
   const service = Service.create({ name: 'Service For Appt', durationMinutes: 30, price: 20 });
 
   const appt = Appointment.create({

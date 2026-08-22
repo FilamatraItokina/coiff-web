@@ -4,6 +4,7 @@ describe('Barber Model', () => {
   test('creates and retrieves a barber successfully', () => {
     const barberData = {
       name: 'Jean Barbier',
+      email: 'jean.barbier@example.com',
       photoUrl: 'https://example.com/jean.jpg',
       bio: 'Spécialiste dégradé et taille de barbe',
       specialties: ['Dégradé', 'Taille de barbe'],

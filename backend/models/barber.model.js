@@ -1,18 +1,22 @@
 const db = require('../config/db');
 
 class BarberModel {
-  static create({ name, photoUrl = '', bio = '', specialties = [], workingHours = {} }) {
+  static create({ name, email, photoUrl = '', bio = '', specialties = [], workingHours = {} }) {
     if (!name) {
       throw new Error('Barber name is required');
     }
+    if (!email) {
+      throw new Error('Barber email is required');
+    }
 
     const stmt = db.prepare(`
-      INSERT INTO barbers (name, photoUrl, bio, specialties, workingHours)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO barbers (name, email, photoUrl, bio, specialties, workingHours)
+      VALUES (?, ?, ?, ?, ?, ?)
     `);
 
     const result = stmt.run(
       name,
+      email,
       photoUrl,
       bio,
       JSON.stringify(specialties),

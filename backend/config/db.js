@@ -28,6 +28,7 @@ function initTables(database) {
     CREATE TABLE IF NOT EXISTS barbers (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
+      email TEXT NOT NULL,
       photoUrl TEXT,
       bio TEXT,
       specialties TEXT,
@@ -35,6 +36,7 @@ function initTables(database) {
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+
 
     CREATE TABLE IF NOT EXISTS services (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,6 +63,13 @@ function initTables(database) {
       UNIQUE(barberId, date, time)
     );
   `);
+
+  // Migrate missing email column if table already existed prior to task 3
+  const barberCols = database.prepare("PRAGMA table_info(barbers)").all();
+  const hasEmail = barberCols.some((col) => col.name === 'email');
+  if (!hasEmail && barberCols.length > 0) {
+    database.exec("ALTER TABLE barbers ADD COLUMN email TEXT DEFAULT ''");
+  }
 }
 
 module.exports = db;

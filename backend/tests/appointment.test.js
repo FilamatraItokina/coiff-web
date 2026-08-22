@@ -9,6 +9,7 @@ describe('Appointment Model', () => {
   beforeAll(() => {
     barber = Barber.create({
       name: 'Marc',
+      email: 'marc@example.com',
       specialties: ['Coupe'],
     });
 
