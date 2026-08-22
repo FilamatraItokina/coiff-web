@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { formatPaginationResponse } = require('../utils/paginate');
 
 class BarberModel {
   static create({ name, email, photoUrl = '', bio = '', specialties = [], workingHours = {} }) {
@@ -55,20 +56,16 @@ class BarberModel {
   static findPaginated({ page = 1, limit = 10 }) {
     const offset = (page - 1) * limit;
     const totalItems = this.count();
-    const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / limit);
 
     const stmt = db.prepare('SELECT * FROM barbers LIMIT ? OFFSET ?');
     const rows = stmt.all(limit, offset);
 
-    return {
+    return formatPaginationResponse({
       data: rows.map((row) => this.formatPublicRow(row)),
-      pagination: {
-        currentPage: page,
-        totalPages,
-        totalItems,
-        limit,
-      },
-    };
+      totalItems,
+      page,
+      limit,
+    });
   }
 
   static formatRow(row) {

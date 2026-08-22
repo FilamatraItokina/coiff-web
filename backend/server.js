@@ -41,8 +41,10 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 const barbersRoutes = require('./routes/barbers.routes');
+const servicesRoutes = require('./routes/services.routes');
 
 app.use('/api/barbers', barbersRoutes);
+app.use('/api/services', servicesRoutes);
 
 // Fallback error handler
 app.use((err, req, res, next) => {
