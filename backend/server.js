@@ -39,10 +39,24 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// API Routes
+const barbersRoutes = require('./routes/barbers.routes');
+
+app.use('/api/barbers', barbersRoutes);
+
+// Fallback error handler
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+let server;
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 module.exports = { app, server };

@@ -39,12 +39,44 @@ class BarberModel {
     return rows.map((row) => this.formatRow(row));
   }
 
+  static count() {
+    const stmt = db.prepare('SELECT COUNT(*) AS total FROM barbers');
+    const result = stmt.get();
+    return result ? result.total : 0;
+  }
+
+  static findPaginated({ page = 1, limit = 10 }) {
+    const offset = (page - 1) * limit;
+    const totalItems = this.count();
+    const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / limit);
+
+    const stmt = db.prepare('SELECT * FROM barbers LIMIT ? OFFSET ?');
+    const rows = stmt.all(limit, offset);
+
+    return {
+      data: rows.map((row) => this.formatPublicRow(row)),
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalItems,
+        limit,
+      },
+    };
+  }
+
   static formatRow(row) {
     return {
       ...row,
       specialties: row.specialties ? JSON.parse(row.specialties) : [],
       workingHours: row.workingHours ? JSON.parse(row.workingHours) : {},
     };
+  }
+
+  static formatPublicRow(row) {
+    if (!row) return null;
+    const formatted = this.formatRow(row);
+    delete formatted.email;
+    return formatted;
   }
 }
 
