@@ -82,3 +82,48 @@ describe('GET /api/barbers', () => {
     expect(resString.statusCode).toBe(400);
   });
 });
+
+describe('GET /api/barbers/:id', () => {
+  let seededBarbers;
+
+  beforeAll(() => {
+    const result = seedDatabase();
+    seededBarbers = result.barbers;
+  });
+
+  test('returns barber details for a valid existing ID without exposing email', async () => {
+    const targetBarber = seededBarbers[0];
+    const res = await request(app).get(`/api/barbers/${targetBarber.id}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('id', targetBarber.id);
+    expect(res.body).toHaveProperty('name', targetBarber.name);
+    expect(res.body).toHaveProperty('photoUrl');
+    expect(res.body).toHaveProperty('bio');
+    expect(res.body).toHaveProperty('specialties');
+    expect(res.body).toHaveProperty('workingHours');
+    expect(res.body).not.toHaveProperty('email');
+  });
+
+  test('returns 404 for a non-existing barber ID', async () => {
+    const res = await request(app).get('/api/barbers/99999');
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toEqual({ error: 'Barber not found' });
+  });
+
+  test('returns 400 for invalid or malformed ID', async () => {
+    const resString = await request(app).get('/api/barbers/invalid-id');
+    expect(resString.statusCode).toBe(400);
+    expect(resString.body).toHaveProperty('error');
+
+    const resZero = await request(app).get('/api/barbers/0');
+    expect(resZero.statusCode).toBe(400);
+
+    const resNegative = await request(app).get('/api/barbers/-5');
+    expect(resNegative.statusCode).toBe(400);
+
+    const resDecimal = await request(app).get('/api/barbers/1.5');
+    expect(resDecimal.statusCode).toBe(400);
+  });
+});

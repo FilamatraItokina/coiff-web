@@ -33,6 +33,13 @@ class BarberModel {
     return this.formatRow(row);
   }
 
+  static findPublicById(id) {
+    const row = this.findById(id);
+    if (!row) return null;
+    delete row.email;
+    return row;
+  }
+
   static findAll() {
     const stmt = db.prepare('SELECT * FROM barbers');
     const rows = stmt.all();

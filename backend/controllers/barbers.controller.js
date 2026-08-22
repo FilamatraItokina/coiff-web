@@ -28,6 +28,31 @@ const getBarbers = (req, res, next) => {
   }
 };
 
+const getBarberById = (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id < 1) {
+      return res.status(400).json({
+        error: "L'identifiant du barbier est invalide.",
+      });
+    }
+
+    const barber = Barber.findPublicById(id);
+
+    if (!barber) {
+      return res.status(404).json({
+        error: 'Barber not found',
+      });
+    }
+
+    return res.status(200).json(barber);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   getBarbers,
+  getBarberById,
 };
